@@ -1,0 +1,23 @@
+name: Temporary Fal Download Bridge Test
+on:
+  push:
+    branches:
+      - delivery/fal-download-bridge-test
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download test video
+        run: |
+          curl -L --fail --retry 3 'https://v3b.fal.media/files/b/0aa915b2/Lzrtynzwyl03sF1taBXbc_output.mp4' -o test-video.mp4
+          test -s test-video.mp4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fal-download-bridge-test
+          path: test-video.mp4
+          compression-level: 0
+          retention-days: 1
